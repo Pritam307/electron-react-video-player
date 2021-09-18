@@ -18,8 +18,6 @@ const LandingPage = () => {
         }
     }
 
-
-
     return (
         <div className="container-fluid border border-dark p-5">
             <div className="col-12 m-5 p-5">

@@ -17,6 +17,7 @@ function App() {
   return (
     <SocketContext.Provider value={socket}>
       <div className="App">
+        
         <LandingPage/>
 
         <Router>
