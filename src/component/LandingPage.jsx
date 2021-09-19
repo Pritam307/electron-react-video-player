@@ -1,19 +1,56 @@
-import React,{useRef,useContext} from 'react';
+import React,{ useRef,useContext,useEffect,useState} from 'react';
 import { SocketContext } from './SocketContext';
+import { useHistory } from 'react-router';
 
 const LandingPage = () => {
 
+    const socket = useContext(SocketContext);
+
     const createBtnRef = useRef();
     const joinBtnRef = useRef();
-    const socket = useContext(SocketContext);
+    const history = useHistory();
+
+
+    const [redirect,setRedirect] = useState(false);
+
+    useEffect(()=>{
+        socket.on("GROUP_ACK",(data)=>{
+            console.log("data:",data);
+            if(data.status === "success"){
+                localStorage.setItem("USERID",data.userId)
+                setRedirect(true);
+                
+            }
+        })
+    },[socket])
+
+
+    useEffect(()=>{
+        if(redirect){
+            history.push({
+                pathname:"/video"
+            })
+        }
+    },[redirect])
 
 
     const handleCreateGroup=()=>{
         if(createBtnRef.current.value){
-            console.log(createBtnRef.current.value);
             socket.emit("GROUP_CREATE",{
                 name:createBtnRef.current.value,
-                admin:true
+                admin:true, 
+            })
+        }
+    }
+
+
+    const handleJoinGroup=()=>{
+        if(joinBtnRef.current.value){
+
+            console.log("join:",joinBtnRef.current.value);
+            socket.emit("GROUP_JOIN",{
+                name:joinBtnRef.current.value,
+                admin:false, 
             })
         }
     }
@@ -46,7 +83,7 @@ const LandingPage = () => {
                         </div>
                     </div>
                     <div className="col-4">
-                        <button className="btn btn-primary">Join</button>
+                        <button className="btn btn-primary" onClick={handleJoinGroup}>Join</button>
                     </div>
                 </div>
 

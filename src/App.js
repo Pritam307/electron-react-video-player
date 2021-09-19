@@ -10,21 +10,20 @@ import {SocketContext,socket} from "./component/SocketContext";
 function App() {
 
   const url_params=[
-    // {url:"landing_page",component:LandingPage},
-    {url:"video_play",component:VideoPlayerComp},
+    {url:"",component:LandingPage},
+    {url:"video",component:VideoPlayerComp},
   ]
 
   return (
     <SocketContext.Provider value={socket}>
       <div className="App">
-        
-        <LandingPage/>
 
         <Router>
           <Switch>
             {
               url_params.map((item,index)=>(
                 <Route 
+                  exact
                   key={index}
                   path={"/"+item.url} 
                   component={item.component}
